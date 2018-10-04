@@ -231,9 +231,15 @@ addTest('CSS transitions interpolate over <number> in web component', async func
   class CustomElementInterpolation extends HTMLElement {
     constructor() {
       super();
-      this.attributeStyleMap.set('transition', `${name} 50s`);
+
+      // For some reason, only this test requires triggering a style recalc,
+      // and MUST have the follow functions (set transition, get computed style, set property)
+      // in this exact order to trigger the interpolation.
+      this.attributeStyleMap.set('transition', `${name} 10s, background-color 10s`);
+      getComputedStyle(this).getPropertyValue(name);
       this.attributeStyleMap.set(name, '10');
-      wait(1000).then(() => {
+
+      wait(100).then(() => {
         const value = this.computedStyleMap().get(name).value;
         try {
           assert(value > 0);
@@ -247,7 +253,7 @@ addTest('CSS transitions interpolate over <number> in web component', async func
   }
 
   const child = document.createElement(elementName);
-  child.style.display = 'none';
+  child.style.display = 'block';
   child.style.width = child.style.height = '100px';
   el.querySelector('.desc').appendChild(child);
   customElements.define(elementName, CustomElementInterpolation);
