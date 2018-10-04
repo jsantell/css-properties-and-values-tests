@@ -253,8 +253,8 @@ addTest('CSS transitions interpolate over <number> in web component', async func
   }
 
   const child = document.createElement(elementName);
+  // Element also cannot be set to display:none!
   child.style.display = 'block';
-  child.style.width = child.style.height = '100px';
   el.querySelector('.desc').appendChild(child);
   customElements.define(elementName, CustomElementInterpolation);
 
