@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>CSS Properties and Values Tests</title>
+    <style>
+body {
+  font-family: Helvetica, "Helvetica Neue", sans-serif;
+  font-weight: 300;
+  margin: 0 auto;
+  width: 80%;
+}
+a {
+  color: #666;
+}
+h1 {
+  font-weight: 200;
+}
+tr {
+  height: 30px;
+  text-align: center;
+  position: relative;
+}
+table {
+  margin: 50px auto;
+}
+td.test-source {
+  width: 50px;
+}
+td.is-supported {
+  width: 100px;
+}
+td.test-source .source {
+  display: none;
+  max-height: 500px;
+  background-color: white;
+  color: #333;
+  font-family: monospace;
+  padding: 20px;
+  text-align: left;
+  white-space: pre;
+  border: 1px solid #333;
+}
+td.test-source a:hover .source {
+  display: block;
+  position: absolute;
+}
+
+td.desc {
+  padding-left: 20px;
+  text-align: left;
+}
+.chromium[version="69"]:after,
+.chromium[version="70"]:after,
+.chromium[version="71"]:after {
+  content: '⚑';
+}
+
+.supported { background-color: #dcedc8; }
+.unsupported { background-color: #ffcdd2; }
+    </style>
+  </head>
+  <body>
+    <h1>CSS Properties and Values Level 1: Tests</h1>
+    <p>Test cases for seeing what's implemented currently in browsers from <a href="https://www.w3.org/TR/css-properties-values-api-1/">CSS Properties and Values API Level 1</a>. The scope is based off of my own personal use cases.</p>
+    <p><a href="https://github.com/jsantell/css-properties-and-values-tests">View source on GitHub</a></p>
+    <table id="tests">
+      <tr>
+          <th>Source</th>
+          <th>Description</th>
+          <th>Current browser</th>
+          <th>Chromium</th>
+      </tr>
+      <tr id="attrstylemap-get-type">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=71>71</td>
+      </tr>
+      <tr id="attrstylemap-set-list">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium unsupported"></td>
+      </tr>
+      <tr id="attrstylemap-get-transform-value">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium unsupported"></td>
+      </tr>
+      <tr id="computedstylemap-get-type">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=69>~69</td>
+      </tr>
+      <tr id="computedstylemap-get-transform-value">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium unsupported"></td>
+      </tr>
+      <tr id="interpolate-transitions">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=69>~69</td>
+      </tr>
+      <tr id="interpolate-keyframes">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=69>~69</td>
+      </tr>
+      <tr id="interpolate-transitions-list">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=71>
+          <a href="https://crbug.com/868959">71</a>
+        </td>
+      </tr>
+      <tr id="interpolate-keyframes-list">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=71>
+          <a href="https://crbug.com/868959">71</a>
+        </td>
+      </tr>
+      <tr id="css-parse-type">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=71>71</td>
+      </tr>
+      <tr id="css-parse-all-type-pound">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=71>71</td>
+      </tr>
+      <tr id="css-parse-all-type-plus">
+        <td class="test-source"><a href="#">?<div class="source"></div></a></td>
+        <td class="desc"></td>
+        <td class="is-supported current"></td>
+        <td class="is-supported chromium supported" version=71>71</td>
+      </tr>
+    </table>
+    <script src="tests.js"></script>
+</body>
+</html>
