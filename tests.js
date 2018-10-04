@@ -23,6 +23,15 @@ const createStyle = str => {
   document.head.appendChild(style);
 }
 
+const deferred = () => {
+  let resolve, reject;
+  let promise = new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { resolve, reject, promise };
+}
+
 const ANIMATION_NAME = 'test-animation';
 const KEYFRAME_PROP = '--keyframe-property';
 const tests = [];
@@ -48,7 +57,7 @@ async function runTests () {
   }
 }
 
-addTest('attributeStyleMap.get(v) returns CSSUnitValue for <number> type', async function (el) {
+addTest('attributeStyleMap.get(v) returns CSSUnitValue for <number>', async function (el) {
   const name = getValidCSSPropName();
   CSS.registerProperty({
     name,
@@ -59,9 +68,9 @@ addTest('attributeStyleMap.get(v) returns CSSUnitValue for <number> type', async
 
   el.attributeStyleMap.set(name, '10');
   assert(el.attributeStyleMap.get(name) instanceof CSSUnitValue);
-}, '#attrstylemap-get-type');
+}, '#attrstylemap-get-number-value');
 
-addTest('attributeStyleMap.get(v) returns CSSUnitValue for <number> type', async function (el) {
+addTest('attributeStyleMap.get(v) returns CSSTransformValue for <transform-list>', async function (el) {
   const name = getValidCSSPropName();
   CSS.registerProperty({
     name,
@@ -74,7 +83,20 @@ addTest('attributeStyleMap.get(v) returns CSSUnitValue for <number> type', async
   assert(el.attributeStyleMap.get(name) instanceof CSSTransformValue);
 }, '#attrstylemap-get-transform-value');
 
-addTest('attributeStyleMap.set() can set a list via <number>#', async function (el) {
+addTest('attributeStyleMap.set() <number>', async function (el) {
+  const name = getValidCSSPropName();
+  CSS.registerProperty({
+    name,
+    syntax: '<number>',
+    inherits: false,
+    initialValue: '0',
+  });
+
+  el.attributeStyleMap.set(name, '10');
+  assert(el.attributeStyleMap.get(name).value === 10);
+}, '#attrstylemap-set-number');
+
+addTest('attributeStyleMap.set() <number>#', async function (el) {
   const name = getValidCSSPropName();
   CSS.registerProperty({
     name,
@@ -105,7 +127,21 @@ addTest('attributeStyleMap.set() can set a list via <number>#', async function (
   const values = el.attributeStyleMap.getAll(name);
   assertEqual(values.length, 3);
   assert(values.every((v, i) => v.value === ((i+1)*10)));
-}, '#attrstylemap-set-list');
+}, '#attrstylemap-set-number-list');
+
+addTest('attributeStyleMap.set() <color>', async function (el) {
+  const name = getValidCSSPropName();
+  CSS.registerProperty({
+    name,
+    syntax: '<color>',
+    inherits: false,
+    initialValue: '#ff0077',
+  });
+
+  el.attributeStyleMap.set(name, '#00ff00');
+  assert(el.attributeStyleMap.get(name).value === '#00ff00');
+}, '#attrstylemap-set-color');
+
 
 addTest('computedStyleMap().get(v) returns CSSUnitValue for <number> type', async function (el) {
   const name = getValidCSSPropName();
@@ -179,6 +215,45 @@ addTest('CSS keyframes interpolate over <number>', async function (el) {
   assert(value > 0);
   assert(value < 10);
 }, '#interpolate-keyframes');
+
+addTest('CSS transitions interpolate over <number> in web component', async function (el) {
+  const name = getValidCSSPropName();
+  const elementName = `test-${getValidCSSName()}`;
+  CSS.registerProperty({
+    name,
+    syntax: '<number>',
+    inherits: false,
+    initialValue: '0',
+  });
+
+  const { promise, resolve, reject } = deferred();
+
+  class CustomElementInterpolation extends HTMLElement {
+    constructor() {
+      super();
+      this.attributeStyleMap.set('transition', `${name} 50s`);
+      this.attributeStyleMap.set(name, '10');
+      wait(1000).then(() => {
+        const value = this.computedStyleMap().get(name).value;
+        try {
+          assert(value > 0);
+          assert(value < 10);
+          resolve();
+        } catch (e) {
+          reject();
+        }
+      });
+    }
+  }
+
+  const child = document.createElement(elementName);
+  child.style.display = 'none';
+  child.style.width = child.style.height = '100px';
+  el.querySelector('.desc').appendChild(child);
+  customElements.define(elementName, CustomElementInterpolation);
+
+  return promise;
+}, '#interpolate-transitions-web-component');
 
 addTest('CSS transitions interpolate over <number># list', async function (el) {
   const name = getValidCSSPropName();
